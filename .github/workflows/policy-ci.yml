@@ -1,0 +1,73 @@
+name: Policy CI/CD
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  validate_json:
+    name: Validate Policy JSON
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Validate JSON syntax
+        run: |
+          for f in $(find policies/definitions -name '*.json'); do
+            jq empty "$f" || exit 1
+          done
+
+  opa_test:
+    name: OPA Policy Unit Tests
+    runs-on: ubuntu-latest
+    needs: validate_json
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install opa
+        run: |
+          wget https://openpolicyagent.org/downloads/latest/opa_linux_amd64
+          chmod +x opa_linux_amd64
+          sudo mv opa_linux_amd64 /usr/local/bin/opa
+
+      - name: Run OPA tests
+        run: opa test ./policies/definitions ./tests
+
+  terraform_plan:
+    name: Terraform Plan for Assignments
+    runs-on: ubuntu-latest
+    needs: opa_test
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Terraform init
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.6
+
+      - name: Terraform init remote state
+        run: terraform init
+
+      - name: Terraform validate
+        run: terraform validate
+
+      - name: Terraform plan
+        id: plan
+        run: terraform plan -out=tfplan
+
+      - name: Upload plan as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-plan
+          path: tfplan
