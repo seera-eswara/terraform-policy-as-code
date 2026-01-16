@@ -6,10 +6,9 @@ resource "azurerm_policy_assignment" "corp_allowed_skus" {
   parameters = jsonencode({
     allowedSkus = {
       value = [
-        "Standard_B2s",
-        "Standard_B4ms",
-        "Standard_D4s_v5",
-        "Standard_D8s_v5"
+        "Standard_B2ts_v2",
+        "Standard_B2ats_v2",
+        "Standard_B2pts_v2"
       ]
     }
   })
