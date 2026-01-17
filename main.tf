@@ -10,12 +10,12 @@ data "terraform_remote_state" "landingzone" {
 
 resource "azurerm_policy_definition" "allowed_vm_skus" {
   name         = "allowed-vm-skus"
-  policy_type = "Custom"
+  policy_type  = "Custom"
   mode         = "Indexed"
   display_name = "Allowed VM SKUs"
 
   policy_rule = file("${path.module}/policies/definitions/allowed-vm-skus.json")
-  parameters  = jsonencode({
+  parameters = jsonencode({
     allowedSkus = {
       type = "Array"
     }
