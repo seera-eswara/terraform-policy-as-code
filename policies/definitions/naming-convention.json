@@ -1,0 +1,40 @@
+{
+  "if": {
+    "allOf": [
+      {
+        "field": "type",
+        "in": [
+          "Microsoft.Compute/virtualMachines",
+          "Microsoft.Storage/storageAccounts",
+          "Microsoft.Network/virtualNetworks",
+          "Microsoft.ContainerService/managedClusters"
+        ]
+      },
+      {
+        "not": {
+          "field": "name",
+          "match": "[parameters('namingPattern')]"
+        }
+      }
+    ]
+  },
+  "then": {
+    "effect": "deny"
+  },
+  "parameters": {
+    "namingPattern": {
+      "type": "String",
+      "metadata": {
+        "displayName": "Naming Pattern",
+        "description": "Regex pattern for resource naming (e.g., app-env-resource)"
+      }
+    },
+    "environment": {
+      "type": "Array",
+      "metadata": {
+        "displayName": "Allowed Environments",
+        "description": "List of allowed environment values"
+      }
+    }
+  }
+}
