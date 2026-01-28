@@ -193,7 +193,7 @@ resource "azurerm_policy_definition" "naming_convention_lz" {
 resource "azurerm_management_group_policy_assignment" "cloudinfra_allowed_skus" {
   count = var.enable_cloudinfra_policies ? 1 : 0
 
-  name                 = "cloudinfra-allowed-skus"
+  name                 = "ci-allowed-skus"
   policy_definition_id = azurerm_policy_definition.allowed_vm_skus_cloudinfra.id
   management_group_id  = var.cloudinfra_mg_id
 
@@ -210,7 +210,7 @@ resource "azurerm_management_group_policy_assignment" "cloudinfra_allowed_skus" 
 resource "azurerm_management_group_policy_assignment" "cloudinfra_naming" {
   count = var.enable_cloudinfra_policies ? 1 : 0
 
-  name                 = "cloudinfra-naming"
+  name                 = "ci-naming"
   policy_definition_id = azurerm_policy_definition.naming_convention_cloudinfra.id
   management_group_id  = var.cloudinfra_mg_id
 
