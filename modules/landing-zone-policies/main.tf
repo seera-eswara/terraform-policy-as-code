@@ -2,13 +2,13 @@
 # This module deploys Azure Policy definitions and assignments to Management Groups
 
 # CloudInfra policy definitions
-resource "azurerm_policy_definition" "allowed_vm_skus_cloudinfra" {
-  name                = "cloudinfra-allowed-vm-skus"
+resource "azurerm_policy_definition" "allowed_vm_skus_platform" {
+  name                = "platform-allowed-vm-skus"
   policy_type         = "Custom"
   mode                = "Indexed"
   display_name        = "Allowed VM SKUs"
   description         = "Restrict virtual machines to approved SKUs"
-  management_group_id = var.cloudinfra_mg_id
+  management_group_id = var.platform_mg_id
 
   metadata = jsonencode({
     category = "Compute"
@@ -46,13 +46,13 @@ resource "azurerm_policy_definition" "allowed_vm_skus_cloudinfra" {
   })
 }
 
-resource "azurerm_policy_definition" "naming_convention_cloudinfra" {
-  name                = "cloudinfra-naming-convention"
+resource "azurerm_policy_definition" "naming_convention_platform" {
+  name                = "platform-naming-convention"
   policy_type         = "Custom"
   mode                = "Indexed"
   display_name        = "Resource Naming Convention"
   description         = "Enforce standardized resource naming patterns"
-  management_group_id = var.cloudinfra_mg_id
+  management_group_id = var.platform_mg_id
 
   metadata = jsonencode({
     category = "Naming"
@@ -189,30 +189,30 @@ resource "azurerm_policy_definition" "naming_convention_lz" {
   })
 }
 
-# Policy Assignments for cloudinfra MG
-resource "azurerm_management_group_policy_assignment" "cloudinfra_allowed_skus" {
-  count = var.enable_cloudinfra_policies ? 1 : 0
+# Policy Assignments for platform MG
+resource "azurerm_management_group_policy_assignment" "platform_allowed_skus" {
+  count = var.enable_platform_policies ? 1 : 0
 
   name                 = "ci-allowed-skus"
-  policy_definition_id = azurerm_policy_definition.allowed_vm_skus_cloudinfra.id
-  management_group_id  = var.cloudinfra_mg_id
+  policy_definition_id = azurerm_policy_definition.allowed_vm_skus_platform.id
+  management_group_id  = var.platform_mg_id
 
   parameters = jsonencode({
     allowedSkus = {
-      value = var.cloudinfra_allowed_vm_skus
+      value = var.platform_allowed_vm_skus
     }
   })
 
-  description  = "Enforce allowed VM SKUs across cloudinfra subscriptions"
-  display_name = "cloudinfra: Allowed VM SKUs"
+  description  = "Enforce allowed VM SKUs across platform subscriptions"
+  display_name = "platform: Allowed VM SKUs"
 }
 
-resource "azurerm_management_group_policy_assignment" "cloudinfra_naming" {
-  count = var.enable_cloudinfra_policies ? 1 : 0
+resource "azurerm_management_group_policy_assignment" "platform_naming" {
+  count = var.enable_platform_policies ? 1 : 0
 
   name                 = "ci-naming"
-  policy_definition_id = azurerm_policy_definition.naming_convention_cloudinfra.id
-  management_group_id  = var.cloudinfra_mg_id
+  policy_definition_id = azurerm_policy_definition.naming_convention_platform.id
+  management_group_id  = var.platform_mg_id
 
   parameters = jsonencode({
     namingPattern = {
@@ -221,7 +221,7 @@ resource "azurerm_management_group_policy_assignment" "cloudinfra_naming" {
   })
 
   description  = "Enforce resource naming conventions"
-  display_name = "cloudinfra: Naming Convention"
+  display_name = "platform: Naming Convention"
 }
 
 # Policy Assignments for LandingZones MG

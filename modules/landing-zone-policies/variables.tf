@@ -1,4 +1,4 @@
-variable "cloudinfra_mg_id" {
+variable "platform_mg_id" {
   description = "Management Group ID for cloudinfra"
   type        = string
   default     = ""
@@ -10,7 +10,7 @@ variable "landingzone_mg_id" {
   default     = ""
 }
 
-variable "enable_cloudinfra_policies" {
+variable "enable_platform_policies" {
   description = "Enable policy assignments for cloudinfra MG"
   type        = bool
   default     = true
@@ -22,7 +22,7 @@ variable "enable_landingzone_policies" {
   default     = true
 }
 
-variable "cloudinfra_allowed_vm_skus" {
+variable "platform_allowed_vm_skus" {
   description = "Allowed VM SKUs for cloudinfra subscriptions"
   type        = list(string)
   default = [
