@@ -97,7 +97,7 @@ resource "azurerm_policy_definition" "naming_convention_cloudinfra" {
 
 # LandingZones policy definitions
 resource "azurerm_policy_definition" "allowed_vm_skus_lz" {
-  name                = "landingzone-allowed-vm-skus"
+  name = "lz-allowed-skus"
   policy_type         = "Custom"
   mode                = "Indexed"
   display_name        = "Allowed VM SKUs"
@@ -141,7 +141,7 @@ resource "azurerm_policy_definition" "allowed_vm_skus_lz" {
 }
 
 resource "azurerm_policy_definition" "naming_convention_lz" {
-  name                = "landingzone-naming-convention"
+  name = "lz-naming"
   policy_type         = "Custom"
   mode                = "Indexed"
   display_name        = "Resource Naming Convention"
