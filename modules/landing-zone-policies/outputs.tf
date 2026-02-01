@@ -11,15 +11,15 @@ output "policy_definition_ids" {
 output "platform_policy_assignments" {
   description = "IDs of policy assignments for platform MG"
   value = {
-    allowed_vm_skus = var.enable_platform_policies ? azurerm_management_group_policy_assignment.platform_allowed_skus[0].id : null
-    naming          = var.enable_platform_policies ? azurerm_management_group_policy_assignment.platform_naming[0].id : null
+    allowed_vm_skus = try(one(azurerm_management_group_policy_assignment.platform_allowed_skus[*].id), null)
+    naming          = try(one(azurerm_management_group_policy_assignment.platform_naming[*].id), null)
   }
 }
 
 output "landingzone_policy_assignments" {
   description = "IDs of policy assignments for LandingZones MG"
   value = {
-    allowed_vm_skus = var.enable_landingzone_policies ? azurerm_management_group_policy_assignment.landingzone_allowed_skus[0].id : null
-    naming          = var.enable_landingzone_policies ? azurerm_management_group_policy_assignment.landingzone_naming[0].id : null
+    allowed_vm_skus = try(one(azurerm_management_group_policy_assignment.landingzone_allowed_skus[*].id), null)
+    naming          = try(one(azurerm_management_group_policy_assignment.landingzone_naming[*].id), null)
   }
 }
