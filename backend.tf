@@ -4,5 +4,6 @@ terraform {
     storage_account_name = "tfstatelzqiaypb"
     container_name       = "tfstate"
     key                  = "policy-as-code.tfstate"
+    use_oidc             = true
   }
 }
